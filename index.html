@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Politie Pacman - Woordenschat Patrouille (25x30)</title>
+    <title>Politie Pacman - Woordenbank Patrouille (25x30)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
@@ -33,10 +33,10 @@
             overflow-x: hidden;
         }
 
-        /* HEADER & DASHBOARD */
+        /* HEADER & STATS */
         header {
             width: 100%;
-            max-width: 1100px;
+            max-width: 1150px;
             padding: 12px 20px;
             display: flex;
             justify-content: space-between;
@@ -100,18 +100,18 @@
             gap: 8px;
         }
 
-        /* HOOFDCONTAINER */
+        /* HOOFD PODIUM */
         .main-stage {
             display: flex;
             gap: 25px;
             margin: 15px auto;
-            max-width: 1150px;
+            max-width: 1200px;
             align-items: flex-start;
             justify-content: center;
             padding: 0 15px;
         }
 
-        /* SPEELVELD */
+        /* SPEELVELD (25 x 30 TEGELS) */
         .game-wrapper {
             position: relative;
             background: var(--asphalt);
@@ -129,7 +129,7 @@
             background-color: #0b0f19;
         }
 
-        /* LEADERBOARD ZIJPANEEL */
+        /* RECHTER ZIJPANEEL: LEADERBOARD */
         .sidebar {
             width: 320px;
             background: rgba(10, 19, 41, 0.95);
@@ -204,15 +204,15 @@
             line-height: 1.4;
         }
 
-        /* MODAL: WOORDENSCHATTETOETS */
+        /* MODAL MET 10 WOORDENBANK + 5 DEFINITIES */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(5, 10, 25, 0.88);
-            backdrop-filter: blur(6px);
+            background: rgba(5, 10, 25, 0.90);
+            backdrop-filter: blur(8px);
             z-index: 9999;
             display: flex;
             justify-content: center;
@@ -224,25 +224,25 @@
             background: #111a2e;
             border: 3px solid var(--police-accent);
             border-radius: 14px;
-            max-width: 650px;
+            max-width: 720px;
             width: 100%;
-            padding: 25px;
-            box-shadow: 0 0 40px rgba(0, 102, 255, 0.5);
-            max-height: 90vh;
+            padding: 22px 25px;
+            box-shadow: 0 0 45px rgba(0, 102, 255, 0.5);
+            max-height: 92vh;
             overflow-y: auto;
         }
 
         .modal-header {
             text-align: center;
             border-bottom: 2px solid rgba(255,255,255,0.1);
-            padding-bottom: 12px;
-            margin-bottom: 15px;
+            padding-bottom: 10px;
+            margin-bottom: 14px;
         }
 
         .modal-header h2 {
             margin: 0;
             color: var(--siren-blue);
-            font-size: 1.4em;
+            font-size: 1.35em;
             text-transform: uppercase;
         }
 
@@ -252,13 +252,73 @@
             color: #cfd8dc;
         }
 
+        /* DE 10-WOORDEN KEUZEBALK */
+        .word-bank-wrapper {
+            background: rgba(0, 102, 255, 0.08);
+            border: 2px dashed #1e88e5;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 16px;
+        }
+
+        .word-bank-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chips-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .word-chip {
+            background: #182848;
+            color: #ffffff;
+            border: 1px solid #3b5998;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        .word-chip:hover {
+            background: var(--police-accent);
+            border-color: var(--siren-blue);
+            transform: translateY(-2px);
+        }
+
+        .word-chip.used {
+            opacity: 0.45;
+            text-decoration: line-through;
+            border-color: #546e7a;
+            background: #0d1627;
+        }
+
+        /* DEFINITIE KAARTEN */
         .question-card {
             background: #182642;
             border: 1px solid #283e6b;
             border-radius: 8px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
+            padding: 10px 14px;
+            margin-bottom: 9px;
             transition: all 0.2s;
+        }
+
+        .question-card.active-slot {
+            border-color: var(--siren-blue);
+            box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
         }
 
         .question-card.correct {
@@ -267,9 +327,9 @@
         }
 
         .question-def {
-            font-size: 0.9em;
+            font-size: 0.88em;
             color: #eceff1;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-style: italic;
         }
 
@@ -281,12 +341,12 @@
 
         .word-input {
             flex: 1;
-            padding: 8px 12px;
+            padding: 7px 12px;
             background: #0a1120;
             border: 2px solid #37474f;
             border-radius: 6px;
             color: #fff;
-            font-size: 0.95em;
+            font-size: 0.92em;
             font-weight: bold;
             outline: none;
             text-transform: lowercase;
@@ -310,7 +370,7 @@
             font-weight: bold;
             cursor: pointer;
             width: 100%;
-            margin-top: 15px;
+            margin-top: 10px;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: all 0.2s;
@@ -327,7 +387,7 @@
             transform: translateY(-2px);
         }
 
-        /* MOBIELE KNOPPEN / SMARTBOARD PIJLEN */
+        /* SMARTBOARD / TOUCH BUTTONS */
         .mobile-dpad {
             display: none;
             grid-template-columns: repeat(3, 50px);
@@ -351,7 +411,7 @@
 
         .dpad-btn:active { background: var(--police-accent); }
 
-        @media (max-width: 900px) {
+        @media (max-width: 950px) {
             .main-stage { flex-direction: column; align-items: center; }
             .sidebar { width: 100%; max-width: 550px; }
             .mobile-dpad { display: grid; }
@@ -366,7 +426,7 @@
             <div class="siren-badge"><i class="fa-solid fa-car-side"></i></div>
             <div class="title-text">
                 <h1>Politie Pacman</h1>
-                <span>25x30 Woordenschat Patrouille</span>
+                <span>25x30 Woordenbank Patrouille</span>
             </div>
         </div>
 
@@ -380,7 +440,7 @@
     <!-- SPEELVELD EN ZIJPANEEL -->
     <div class="main-stage">
         
-        <!-- HET 25 bij 30 DOOLHOF -->
+        <!-- HET 25 BIJ 30 DOOLHOF -->
         <div class="game-wrapper">
             <canvas id="gameCanvas" width="550" height="660"></canvas>
         </div>
@@ -411,19 +471,17 @@
                 Speler: <strong id="currentPlayerLabel" style="color: #fff;">Agent</strong>
             </div>
 
-            <ul class="leaderboard-list" id="leaderboardList">
-                <!-- Dynamisch gevuld -->
-            </ul>
+            <ul class="leaderboard-list" id="leaderboardList"></ul>
 
             <div class="controls-hint">
                 <strong><i class="fa-solid fa-gamepad"></i> Besturing:</strong><br>
                 • Pijltjestoetsen of <strong>W-A-S-D</strong>.<br>
-                • Grote knipperende bollen zijn <strong>Sirene-Turbo's</strong>: rijd over een diefje heen om hem te arresteren!
+                • Grote bollen zijn <strong>Sirene-Turbo's</strong>: arresteer de bange diefjes voor bonuspunten!
             </div>
         </div>
     </div>
 
-    <!-- TOUCH KNOPPEN VOOR TABLETS / SMARTBOARDS -->
+    <!-- TOUCHBEDIENING VOOR SMARTBOARD / TABLET -->
     <div class="mobile-dpad">
         <div></div>
         <button class="dpad-btn" onclick="sendInput('up')"><i class="fa-solid fa-arrow-up"></i></button>
@@ -433,26 +491,36 @@
         <button class="dpad-btn" onclick="sendInput('right')"><i class="fa-solid fa-arrow-right"></i></button>
     </div>
 
-    <!-- MODAL POPUP: WOORDENSCHATTETOETS (5 WOORDEN) -->
+    <!-- MODAL POPUP: WOORDENSCHATTETOETS (10 WOORDENBANK -> 5 DEFINITIES) -->
     <div class="modal-overlay" id="vocabModal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="modalTitle"><i class="fa-solid fa-key"></i> Politie Kennisverificatie</h2>
-                <p id="modalSubtitle">Los de 5 woordenschatopgaven op om de patrouillewagen te starten!</p>
+                <p id="modalSubtitle">Selecteer uit de onderstaande 10 woorden de 5 juiste definities om de patrouillewagen te starten:</p>
             </div>
 
-            <div id="questionsContainer">
-                <!-- 5 invuloefeningen worden hier geladen -->
+            <!-- DE WOORDENBANK MET 10 WOORDEN -->
+            <div class="word-bank-wrapper">
+                <div class="word-bank-header">
+                    <span><i class="fa-solid fa-boxes-stacked"></i> Woordenbank (Kies de 5 juiste):</span>
+                    <span style="font-size:0.85em; color:#90caf9;">Klik op een woord om in te vullen</span>
+                </div>
+                <div class="chips-grid" id="chipsContainer">
+                    <!-- 10 woorden verschijnen hier dynamisch -->
+                </div>
             </div>
+
+            <!-- DE 5 INVULOPGAVEN -->
+            <div id="questionsContainer"></div>
 
             <button class="btn-police" id="btnContinue" disabled onclick="finishVocabChallenge()">
-                <i class="fa-solid fa-lock"></i> Beantwoord alle 5 vragen correct
+                <i class="fa-solid fa-lock"></i> Koppel alle 5 definities correct (0/5)
             </button>
         </div>
     </div>
 
     <script>
-        /* ================= 1. DE 48 WOORDENSCHAT WOORDEN ================= */
+        /* ================= 1. ALLE 48 WOORDEN & DEFINITIES ================= */
         const VOCABULARY = [
             { word: "determineren", def: "bepalen, vaststellen op grond van bepaalde kenmerken" },
             { word: "souterrain", def: "ruimte van een woning die gedeeltelijk beneden straatniveau ligt" },
@@ -504,10 +572,13 @@
             { word: "satirische", def: "op geestige wijze kritiek leverend" }
         ];
 
-        let wordPool = [...VOCABULARY];
-        let currentQuestions = [];
+        let targetPool = [...VOCABULARY];
+        let currentTargets = [];
+        let currentDistractors = [];
+        let currentTenWords = [];
         let completedQuestions = new Set();
         let wordsAnsweredTotal = 0;
+        let activeInputSlot = 0;
 
         function shuffle(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
@@ -517,12 +588,22 @@
             return arr;
         }
 
-        function getNextFiveWords() {
-            if (wordPool.length < 5) {
-                wordPool = [...VOCABULARY];
+        /* Haalt 5 doelen + 5 afleiders op (10 woorden in totaal) */
+        function generateTenWordSet() {
+            if (targetPool.length < 5) {
+                targetPool = [...VOCABULARY];
             }
-            shuffle(wordPool);
-            return wordPool.splice(0, 5);
+            shuffle(targetPool);
+            currentTargets = targetPool.splice(0, 5);
+
+            // Haal 5 willekeurige afleiders die niet in currentTargets zitten
+            const targetWordsSet = new Set(currentTargets.map(t => t.word));
+            const availableDistractors = VOCABULARY.filter(v => !targetWordsSet.has(v.word));
+            shuffle(availableDistractors);
+            currentDistractors = availableDistractors.slice(0, 5);
+
+            // Combineer de 5 doelen + 5 afleiders en schud ze doorelkaar
+            currentTenWords = shuffle([...currentTargets.map(t => t.word), ...currentDistractors.map(d => d.word)]);
         }
 
         /* ================= 2. AUDIO SYNTHESIZER ================= */
@@ -547,17 +628,14 @@
         function sndSiren() { playTone(950, 'sawtooth', 0.15); }
         function sndCatch() { playTone(300, 'square', 0.3); }
         function sndLevelUp() {
-            [400, 550, 700, 900].forEach((f, i) => {
-                setTimeout(() => playTone(f, 'triangle', 0.2), i * 120);
-            });
+            [400, 550, 700, 900].forEach((f, i) => setTimeout(() => playTone(f, 'triangle', 0.2), i * 120));
         }
 
-        /* ================= 3. HET 25 x 30 GRID ================= */
+        /* ================= 3. RASTER 25 BIJ 30 ================= */
         const COLS = 25;
         const ROWS = 30;
-        const TILE = 22; // 25 * 22 = 550px breed, 30 * 22 = 660px hoog
+        const TILE = 22; // 25 * 22 = 550px, 30 * 22 = 660px
 
-        // 1 = Muur, 2 = Stip, 3 = Turbo-Sirene, 0 = Leeg, 4 = Spookhuis-deur/gevangenis
         const MAP_TEMPLATE = [
             [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
             [1,3,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,3,1],
@@ -573,7 +651,7 @@
             [1,1,1,1,1,2,1,0,1,0,0,0,0,0,0,0,1,0,1,2,1,1,1,1,1],
             [0,0,0,0,1,2,1,0,1,1,1,1,1,1,1,1,1,0,1,2,1,0,0,0,0],
             [1,1,1,1,1,2,1,0,0,0,0,0,0,0,0,0,0,0,1,2,1,1,1,1,1],
-            [0,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,0], // Wrap-around tunnel rij
+            [0,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,0], // Wrap-tunnel
             [1,1,1,1,1,2,1,0,1,1,1,1,1,1,1,1,1,0,1,2,1,1,1,1,1],
             [0,0,0,0,1,2,1,0,0,0,0,0,1,0,0,0,0,0,1,2,1,0,0,0,0],
             [1,1,1,1,1,2,1,2,1,1,1,2,1,2,1,1,1,2,1,2,1,1,1,1,1],
@@ -600,7 +678,7 @@
         let turboTimer = 0;
         let sirenFlashState = false;
 
-        /* ================= 4. SPELER & DIEFJES OBJECTEN ================= */
+        /* ================= 4. OBJECTEN ================= */
         const policeCar = {
             x: 12, y: 18,
             pixelX: 12 * TILE, pixelY: 18 * TILE,
@@ -620,7 +698,6 @@
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        /* ================= 5. RESET EN LEVEL INITIALISATIE ================= */
         function initMap() {
             map = [];
             totalDots = 0;
@@ -635,14 +712,10 @@
         }
 
         function resetPositions() {
-            policeCar.x = 12;
-            policeCar.y = 18;
-            policeCar.pixelX = 12 * TILE;
-            policeCar.pixelY = 18 * TILE;
-            policeCar.dirX = 0;
-            policeCar.dirY = 0;
-            policeCar.nextDirX = 0;
-            policeCar.nextDirY = 0;
+            policeCar.x = 12; policeCar.y = 18;
+            policeCar.pixelX = 12 * TILE; policeCar.pixelY = 18 * TILE;
+            policeCar.dirX = 0; policeCar.dirY = 0;
+            policeCar.nextDirX = 0; policeCar.nextDirY = 0;
             policeCar.angle = 0;
 
             const baseSpeed = 1.6 + (level * 0.2);
@@ -658,7 +731,7 @@
             });
         }
 
-        /* ================= 6. BESTURING ================= */
+        /* ================= 5. BESTURING ================= */
         window.addEventListener('keydown', (e) => {
             switch(e.key) {
                 case 'ArrowUp': case 'w': case 'W': sendInput('up'); break;
@@ -677,17 +750,15 @@
         }
 
         function canMove(c, r, isGhost = false) {
-            // Tunnel wrap around
             if ((c < 0 || c >= COLS) && r === 14) return true;
             if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return false;
             const tile = map[r][c];
             if (tile === 1) return false;
-            if (tile === 4 && !isGhost) return false; // Alleen diefjes mogen door tralies
+            if (tile === 4 && !isGhost) return false;
             return true;
         }
 
-        /* ================= 7. RENDER FUNCTIES ================= */
-        // Knipper-interval voor sirene
+        /* ================= 6. TEKENEN OP CANVAS ================= */
         setInterval(() => { sirenFlashState = !sirenFlashState; }, 140);
 
         function drawMap() {
@@ -700,14 +771,12 @@
                     const y = r * TILE;
 
                     if (tile === 1) {
-                        // Strakke blauwe neon politiemuren
                         ctx.fillStyle = '#0f2042';
                         ctx.fillRect(x, y, TILE, TILE);
                         ctx.strokeStyle = '#1e88e5';
                         ctx.lineWidth = 1.5;
                         ctx.strokeRect(x + 1, y + 1, TILE - 2, TILE - 2);
                     } else if (tile === 4) {
-                        // Tralies van gevangenis
                         ctx.fillStyle = '#212121';
                         ctx.fillRect(x, y, TILE, TILE);
                         ctx.strokeStyle = '#bdbdbd';
@@ -718,13 +787,11 @@
                         ctx.moveTo(x + 18, y); ctx.lineTo(x + 18, y + TILE);
                         ctx.stroke();
                     } else if (tile === 2) {
-                        // Gewone stip
                         ctx.fillStyle = '#ffecb3';
                         ctx.beginPath();
                         ctx.arc(x + TILE/2, y + TILE/2, 3, 0, Math.PI * 2);
                         ctx.fill();
                     } else if (tile === 3) {
-                        // Turbo Sirene Bol
                         ctx.fillStyle = sirenFlashState ? '#00e5ff' : '#ff1744';
                         ctx.beginPath();
                         ctx.arc(x + TILE/2, y + TILE/2, 6.5, 0, Math.PI * 2);
@@ -742,40 +809,33 @@
             ctx.translate(policeCar.pixelX + TILE/2, policeCar.pixelY + TILE/2);
             ctx.rotate(policeCar.angle);
 
-            // Koplampen lichtbundel
+            // Koplampen
             ctx.fillStyle = 'rgba(255, 238, 88, 0.22)';
             ctx.beginPath();
-            ctx.moveTo(8, -6);
-            ctx.lineTo(24, -14);
-            ctx.lineTo(24, 14);
-            ctx.lineTo(8, 6);
+            ctx.moveTo(8, -6); ctx.lineTo(24, -14); ctx.lineTo(24, 14); ctx.lineTo(8, 6);
             ctx.closePath();
             ctx.fill();
 
-            // Auto basis
+            // Carrosserie
             ctx.fillStyle = '#ffffff';
             ctx.fillRect(-10, -7, 18, 14);
 
-            // Blauwe politiestriping aan zijkant
+            // Blauwe striping
             ctx.fillStyle = '#003082';
             ctx.fillRect(-6, -7, 10, 3);
             ctx.fillRect(-6, 4, 10, 3);
 
-            // Voorruit & achterruit
+            // Ruiten
             ctx.fillStyle = '#1e293b';
             ctx.fillRect(1, -5, 4, 10);
             ctx.fillRect(-8, -5, 3, 10);
 
-            // Knipperende zwaailichten op dak
+            // Zwaailichten
             ctx.fillStyle = sirenFlashState ? '#ff1744' : '#00e5ff';
-            ctx.beginPath();
-            ctx.arc(-2, -3, 2.5, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(-2, -3, 2.5, 0, Math.PI * 2); ctx.fill();
 
             ctx.fillStyle = sirenFlashState ? '#00e5ff' : '#ff1744';
-            ctx.beginPath();
-            ctx.arc(-2, 3, 2.5, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(-2, 3, 2.5, 0, Math.PI * 2); ctx.fill();
 
             ctx.restore();
         }
@@ -786,40 +846,33 @@
 
             const bodyColor = t.scared ? (turboTimer < 90 && sirenFlashState ? '#ffffff' : '#1e88e5') : t.color;
 
-            // Spookjes / Diefjes lijfje
+            // Spooklijfje
             ctx.fillStyle = bodyColor;
             ctx.beginPath();
             ctx.arc(0, -2, 8, Math.PI, 0, false);
             ctx.lineTo(8, 7);
-            // Gekartelde onderkant
-            ctx.lineTo(4, 5);
-            ctx.lineTo(0, 7);
-            ctx.lineTo(-4, 5);
-            ctx.lineTo(-8, 7);
+            ctx.lineTo(4, 5); ctx.lineTo(0, 7); ctx.lineTo(-4, 5); ctx.lineTo(-8, 7);
             ctx.closePath();
             ctx.fill();
 
             if (!t.scared) {
-                // Zwart boevenmasker
+                // Boevenmasker
                 ctx.fillStyle = '#111111';
                 ctx.fillRect(-7, -4, 14, 4.5);
 
-                // Ogen van de boef
                 ctx.fillStyle = '#ffffff';
                 ctx.beginPath();
                 ctx.arc(-3.5 + t.dirX, -2, 2, 0, Math.PI * 2);
                 ctx.arc(3.5 + t.dirX, -2, 2, 0, Math.PI * 2);
                 ctx.fill();
 
-                // Gestreepte gevangenisboord
+                // Boevenstrepen
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(-5, 2, 10, 1.5);
             } else {
-                // Bange oogjes & boeien
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(-4, -3, 2, 2);
                 ctx.fillRect(2, -3, 2, 2);
-                // Handboeien icoon
                 ctx.strokeStyle = '#cfd8dc';
                 ctx.lineWidth = 1.2;
                 ctx.strokeRect(-4, 2, 8, 3);
@@ -828,11 +881,10 @@
             ctx.restore();
         }
 
-        /* ================= 8. GAME ENGINE & UPDATE LOOP ================= */
+        /* ================= 7. GAME ENGINE LOOP ================= */
         function update() {
             if (!gameRunning) return;
 
-            // --- 1. POLITIECAR BEWEGING ---
             const gridX = Math.round(policeCar.pixelX / TILE);
             const gridY = Math.round(policeCar.pixelY / TILE);
             const atCenter = (Math.abs(policeCar.pixelX - gridX * TILE) < 2) && (Math.abs(policeCar.pixelY - gridY * TILE) < 2);
@@ -843,7 +895,7 @@
                 policeCar.x = gridX;
                 policeCar.y = gridY;
 
-                // Wrap-around tunnel
+                // Wrap-tunnel
                 if (policeCar.x <= 0 && policeCar.dirX === -1) {
                     policeCar.x = COLS - 1;
                     policeCar.pixelX = (COLS - 1) * TILE;
@@ -852,7 +904,7 @@
                     policeCar.pixelX = 0;
                 }
 
-                // Eet stippen
+                // Stippen eten
                 if (map[policeCar.y] && map[policeCar.y][policeCar.x] === 2) {
                     map[policeCar.y][policeCar.x] = 0;
                     score += 10;
@@ -863,19 +915,17 @@
                     map[policeCar.y][policeCar.x] = 0;
                     score += 50;
                     totalDots--;
-                    turboTimer = 280; // Sirene turbo tijd
+                    turboTimer = 280;
                     thieves.forEach(t => t.scared = true);
                     sndSiren();
                     document.getElementById('scoreDisplay').innerText = score;
                 }
 
-                // Check of level leeg is
                 if (totalDots <= 0) {
                     levelUp();
                     return;
                 }
 
-                // Richting veranderen indien mogelijk
                 if (policeCar.nextDirX !== 0 || policeCar.nextDirY !== 0) {
                     if (canMove(policeCar.x + policeCar.nextDirX, policeCar.y + policeCar.nextDirY)) {
                         policeCar.dirX = policeCar.nextDirX;
@@ -883,13 +933,11 @@
                     }
                 }
 
-                // Stop voor muur
                 if (!canMove(policeCar.x + policeCar.dirX, policeCar.y + policeCar.dirY)) {
                     policeCar.dirX = 0;
                     policeCar.dirY = 0;
                 }
 
-                // Bereken draaihoek
                 if (policeCar.dirX === 1) policeCar.angle = 0;
                 if (policeCar.dirX === -1) policeCar.angle = Math.PI;
                 if (policeCar.dirY === 1) policeCar.angle = Math.PI / 2;
@@ -899,12 +947,10 @@
             policeCar.pixelX += policeCar.dirX * policeCar.speed;
             policeCar.pixelY += policeCar.dirY * policeCar.speed;
 
-            // --- 2. DIEFJES AI BEWEGING ---
+            // Diefjes AI
             if (turboTimer > 0) {
                 turboTimer--;
-                if (turboTimer === 0) {
-                    thieves.forEach(t => t.scared = false);
-                }
+                if (turboTimer === 0) thieves.forEach(t => t.scared = false);
             }
 
             thieves.forEach(t => {
@@ -913,26 +959,17 @@
                 const tAtCenter = (Math.abs(t.pixelX - tgX * TILE) < 2) && (Math.abs(t.pixelY - tgY * TILE) < 2);
 
                 if (tAtCenter) {
-                    t.pixelX = tgX * TILE;
-                    t.pixelY = tgY * TILE;
-                    t.x = tgX;
-                    t.y = tgY;
+                    t.pixelX = tgX * TILE; t.pixelY = tgY * TILE;
+                    t.x = tgX; t.y = tgY;
 
-                    // Mogelijke richtingen evalueren
-                    const dirs = [
-                        { x: 1, y: 0 }, { x: -1, y: 0 },
-                        { x: 0, y: 1 }, { x: 0, y: -1 }
-                    ];
-
-                    // Niet direct omkeren tenzij doodlopend
+                    const dirs = [{ x: 1, y: 0 }, { x: -1, y: 0 }, { x: 0, y: 1 }, { x: 0, y: -1 }];
                     const validDirs = dirs.filter(d => {
                         if (d.x === -t.dirX && d.y === -t.dirY) return false;
                         return canMove(t.x + d.x, t.y + d.y, true);
                     });
 
                     if (validDirs.length > 0) {
-                        // Eenvoudige achtervolging of willekeurige patrouille
-                        if (!t.scared && Math.random() < 0.6) {
+                        if (!t.scared && Math.random() < 0.65) {
                             validDirs.sort((a,b) => {
                                 const distA = Math.hypot((t.x + a.x) - policeCar.x, (t.y + a.y) - policeCar.y);
                                 const distB = Math.hypot((t.x + b.x) - policeCar.x, (t.y + b.y) - policeCar.y);
@@ -955,26 +992,22 @@
                 t.pixelX += t.dirX * currentSpeed;
                 t.pixelY += t.dirY * currentSpeed;
 
-                // --- 3. BOTSING CHECK ---
+                // Botsing check
                 const dist = Math.hypot(policeCar.pixelX - t.pixelX, policeCar.pixelY - t.pixelY);
                 if (dist < 14) {
                     if (t.scared) {
-                        // Dief gearresteerd!
                         sndCatch();
                         score += 200;
                         document.getElementById('scoreDisplay').innerText = score;
-                        t.pixelX = 12 * TILE;
-                        t.pixelY = 11 * TILE;
+                        t.pixelX = 12 * TILE; t.pixelY = 11 * TILE;
                         t.x = 12; t.y = 11;
                         t.scared = false;
                     } else {
-                        // Politieauto gecrasht / gepakt!
                         handleCaught();
                     }
                 }
             });
 
-            // RENDEREN
             drawMap();
             drawPoliceCar();
             thieves.forEach(drawThief);
@@ -982,19 +1015,16 @@
             requestAnimationFrame(update);
         }
 
-        /* ================= 9. CRASH & LEVEL OVERGANG ================= */
+        /* ================= 8. CRASH & LEVEL PROGRESSIE ================= */
         function handleCaught() {
             gameRunning = false;
             lives--;
             document.getElementById('livesDisplay').innerText = lives;
 
             if (lives <= 0) {
-                // Game Over
                 saveToLeaderboard();
-                alert(`Geen patrouillewagens meer over! Einde spel.\nJe behaalde een score van ${score} punten in Level ${level}.`);
-                lives = 3;
-                score = 0;
-                level = 1;
+                alert(`Geen patrouillewagens meer over! Einde spel.\nJe score: ${score} punten in Level ${level}.`);
+                lives = 3; score = 0; level = 1;
                 document.getElementById('livesDisplay').innerText = lives;
                 document.getElementById('scoreDisplay').innerText = score;
                 document.getElementById('levelDisplay').innerText = level;
@@ -1002,9 +1032,8 @@
                 resetPositions();
             }
 
-            // Toon woordenschattoets met 5 NIEUWE woorden!
             document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:var(--siren-red)"></i> Aanhouding Mislukt!`;
-            document.getElementById('modalSubtitle').innerText = "Beantwoord 5 nieuwe woordenschatopgaven om je wagen te repareren en door te rijden:";
+            document.getElementById('modalSubtitle').innerText = "Koppel 5 nieuwe woorden uit de woordenbank om je auto te herstellen:";
             openVocabChallenge();
         }
 
@@ -1013,56 +1042,99 @@
             sndLevelUp();
             level++;
             document.getElementById('levelDisplay').innerText = level;
-            alert(`Fantastisch werk, agent! Alle stippen zijn veiliggesteld.\nLevel ${level} start nu: de diefjes worden sneller!`);
+            alert(`Uitstekend werk, agent! Alle stippen zijn gepakt.\nLevel ${level} start: de diefjes worden sneller!`);
             initMap();
             resetPositions();
             gameRunning = true;
             requestAnimationFrame(update);
         }
 
-        /* ================= 10. DE WOORDENSCHAT INVULOEFENING ================= */
+        /* ================= 9. WOORDENBANK & INVULOMGEVING ================= */
         function openVocabChallenge() {
-            currentQuestions = getNextFiveWords();
+            generateTenWordSet();
             completedQuestions.clear();
+            activeInputSlot = 0;
 
-            const container = document.getElementById('questionsContainer');
-            container.innerHTML = "";
+            // 1. Render de 10-Woordenbank Chips
+            const chipsContainer = document.getElementById('chipsContainer');
+            chipsContainer.innerHTML = "";
 
-            currentQuestions.forEach((q, idx) => {
+            currentTenWords.forEach(word => {
+                const chip = document.createElement('div');
+                chip.className = "word-chip";
+                chip.id = `chip_${word.replace(/[^a-zA-Z0-9]/g, '_')}`;
+                chip.innerText = word;
+                chip.onclick = () => selectWordChip(word);
+                chipsContainer.appendChild(chip);
+            });
+
+            // 2. Render de 5 Definitie Invulkaarten
+            const qContainer = document.getElementById('questionsContainer');
+            qContainer.innerHTML = "";
+
+            currentTargets.forEach((q, idx) => {
                 const card = document.createElement('div');
-                card.className = "question-card";
+                card.className = `question-card ${idx === 0 ? 'active-slot' : ''}`;
                 card.id = `qCard_${idx}`;
 
                 card.innerHTML = `
                     <div class="question-def"><strong>${idx + 1}.</strong> ${q.def}</div>
                     <div class="input-row">
                         <input type="text" class="word-input" id="input_${idx}" 
-                            placeholder="Typ het woord (${q.word.length} letters)..." 
+                            placeholder="Typ of klik een woord..." 
                             autocomplete="off" 
+                            onfocus="setActiveSlot(${idx})"
                             oninput="checkAnswer(${idx}, '${q.word}')">
                         <div class="status-icon" id="status_${idx}"><i class="fa-solid fa-clock" style="color:#78909c"></i></div>
                     </div>
                 `;
-                container.appendChild(card);
+                qContainer.appendChild(card);
             });
 
-            const btn = document.getElementById('btnContinue');
-            btn.disabled = true;
-            btn.innerHTML = `<i class="fa-solid fa-lock"></i> Beantwoord alle 5 vragen correct (0/5)`;
-
+            updateContinueButton();
             document.getElementById('vocabModal').style.display = 'flex';
+            setTimeout(() => {
+                const firstInp = document.getElementById('input_0');
+                if (firstInp) firstInp.focus();
+            }, 200);
         }
 
+        window.setActiveSlot = function(idx) {
+            activeInputSlot = idx;
+            document.querySelectorAll('.question-card').forEach((card, i) => {
+                card.classList.toggle('active-slot', i === idx);
+            });
+        };
+
+        window.selectWordChip = function(word) {
+            const currentInp = document.getElementById(`input_${activeInputSlot}`);
+            if (currentInp) {
+                currentInp.value = word;
+                checkAnswer(activeInputSlot, currentTargets[activeInputSlot].word);
+
+                // Ga automatisch door naar het volgende niet-ingevulde vak
+                for (let i = 0; i < 5; i++) {
+                    if (!completedQuestions.has(i)) {
+                        setActiveSlot(i);
+                        const nextInp = document.getElementById(`input_${i}`);
+                        if (nextInp) nextInp.focus();
+                        break;
+                    }
+                }
+            }
+        };
+
         window.checkAnswer = function(idx, expectedWord) {
-            const val = document.getElementById(`input_${idx}`).value.trim().toLowerCase();
+            const inputEl = document.getElementById(`input_${idx}`);
+            const val = inputEl.value.trim().toLowerCase();
             const card = document.getElementById(`qCard_${idx}`);
             const status = document.getElementById(`status_${idx}`);
 
-            // Normaliseer speciale tekens (bijv. ë -> e) voor soepele verificatie
+            // Normaliseer accenten (zoals fecaliën -> fecalien)
             const cleanVal = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
             const cleanExp = expectedWord.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-            if (cleanVal === cleanExp || val === expectedWord) {
+            if (cleanVal === cleanExp || val === expectedWord.toLowerCase()) {
                 card.classList.add('correct');
                 status.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#00e676"></i>`;
                 completedQuestions.add(idx);
@@ -1072,8 +1144,30 @@
                 completedQuestions.delete(idx);
             }
 
+            refreshUsedChipsState();
+            updateContinueButton();
+        };
+
+        function refreshUsedChipsState() {
+            // Zoek alle ingevulde waarden
+            const filledValues = new Set();
+            for (let i = 0; i < 5; i++) {
+                const v = document.getElementById(`input_${i}`)?.value.trim().toLowerCase();
+                if (v) filledValues.add(v);
+            }
+
+            // Update uiterlijk van chips
+            currentTenWords.forEach(w => {
+                const chip = document.getElementById(`chip_${w.replace(/[^a-zA-Z0-9]/g, '_')}`);
+                if (chip) {
+                    chip.classList.toggle('used', filledValues.has(w.toLowerCase()));
+                }
+            });
+        }
+
+        function updateContinueButton() {
             const btn = document.getElementById('btnContinue');
-            btn.innerHTML = `<i class="fa-solid fa-lock"></i> Beantwoord alle 5 vragen correct (${completedQuestions.size}/5)`;
+            btn.innerHTML = `<i class="fa-solid fa-lock"></i> Koppel alle 5 definities correct (${completedQuestions.size}/5)`;
             
             if (completedQuestions.size === 5) {
                 btn.disabled = false;
@@ -1081,7 +1175,7 @@
             } else {
                 btn.disabled = true;
             }
-        };
+        }
 
         window.finishVocabChallenge = function() {
             wordsAnsweredTotal += 5;
@@ -1091,7 +1185,7 @@
             requestAnimationFrame(update);
         };
 
-        /* ================= 11. KLASSEN LEADERBOARD ================= */
+        /* ================= 10. LEADERBOARD PER KLAS ================= */
         let currentClass = "Alpha";
         let playerName = "";
 
@@ -1148,12 +1242,11 @@
             });
         }
 
-        /* ================= 12. STARTUP SEQUENCE ================= */
+        /* ================= 11. STARTUP ================= */
         window.onload = () => {
             initMap();
             drawMap();
             askPlayerInfo();
-            // Start de eerste woordenschatcyclus van 5 vragen
             openVocabChallenge();
         };
     </script>
