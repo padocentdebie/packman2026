@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Politie Pacman - Woordenschat Patrouille (25x30)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --police-blue: #003082;
+            --police-dark: #0a1329;
+            --police-accent: #0066ff;
+            --siren-blue: #00e5ff;
+            --siren-red: #ff1744;
+            --gold: #ffc107;
+            --asphalt: #10141e;
+            --wall-color: #1a3a6b;
+            --wall-glow: #2979ff;
+        }
+
+        * { box-sizing: border-box; user-select: none; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at center, #152238 0%, #080d1a 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* HEADER & DASHBOARD */
+        header {
+            width: 100%;
+            max-width: 1100px;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--police-accent);
+            background: rgba(10, 19, 41, 0.9);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .title-block {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .siren-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--siren-red), var(--siren-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            animation: pulseSiren 0.8s infinite alternate;
+        }
+
+        @keyframes pulseSiren {
+            0% { box-shadow: 0 0 10px var(--siren-blue); }
+            100% { box-shadow: 0 0 20px var(--siren-red); }
+        }
+
+        .title-text h1 {
+            margin: 0;
+            font-size: 1.35em;
+            letter-spacing: 1px;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+        .title-text span {
+            font-size: 0.8em;
+            color: var(--siren-blue);
+            font-weight: bold;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            font-size: 0.95em;
+            font-weight: bold;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.08);
+            padding: 6px 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(0, 150, 255, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* HOOFDCONTAINER */
+        .main-stage {
+            display: flex;
+            gap: 25px;
+            margin: 15px auto;
+            max-width: 1150px;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 0 15px;
+        }
+
+        /* SPEELVELD */
+        .game-wrapper {
+            position: relative;
+            background: var(--asphalt);
+            border: 4px solid var(--wall-color);
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0, 102, 255, 0.3);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            display: block;
+            background-color: #0b0f19;
+        }
+
+        /* LEADERBOARD ZIJPANEEL */
+        .sidebar {
+            width: 320px;
+            background: rgba(10, 19, 41, 0.95);
+            border: 2px solid var(--police-accent);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .sidebar h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.1em;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px dashed rgba(255, 193, 7, 0.4);
+            padding-bottom: 8px;
+        }
+
+        .class-selector {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-size: 0.85em;
+        }
+
+        select {
+            flex: 1;
+            padding: 6px 10px;
+            background: #152238;
+            color: #fff;
+            border: 1px solid var(--police-accent);
+            border-radius: 6px;
+            font-weight: bold;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .leaderboard-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            margin-bottom: 6px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 6px;
+            font-size: 0.85em;
+            border-left: 3px solid #546e7a;
+        }
+
+        .leaderboard-item.top-1 { border-left-color: var(--gold); background: rgba(255,193,7,0.12); }
+        .leaderboard-item.top-2 { border-left-color: #cfd8dc; }
+        .leaderboard-item.top-3 { border-left-color: #cd7f32; }
+
+        .controls-hint {
+            font-size: 0.75em;
+            color: #90caf9;
+            background: rgba(0, 102, 255, 0.1);
+            padding: 10px;
+            border-radius: 6px;
+            line-height: 1.4;
+        }
+
+        /* MODAL: WOORDENSCHATTETOETS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 10, 25, 0.88);
+            backdrop-filter: blur(6px);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: #111a2e;
+            border: 3px solid var(--police-accent);
+            border-radius: 14px;
+            max-width: 650px;
+            width: 100%;
+            padding: 25px;
+            box-shadow: 0 0 40px rgba(0, 102, 255, 0.5);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            text-align: center;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--siren-blue);
+            font-size: 1.4em;
+            text-transform: uppercase;
+        }
+
+        .modal-header p {
+            margin: 6px 0 0 0;
+            font-size: 0.85em;
+            color: #cfd8dc;
+        }
+
+        .question-card {
+            background: #182642;
+            border: 1px solid #283e6b;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .question-card.correct {
+            border-color: #00e676;
+            background: rgba(0, 230, 118, 0.1);
+        }
+
+        .question-def {
+            font-size: 0.9em;
+            color: #eceff1;
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .word-input {
+            flex: 1;
+            padding: 8px 12px;
+            background: #0a1120;
+            border: 2px solid #37474f;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.95em;
+            font-weight: bold;
+            outline: none;
+            text-transform: lowercase;
+        }
+
+        .word-input:focus { border-color: var(--siren-blue); }
+
+        .status-icon {
+            font-size: 1.2em;
+            width: 25px;
+            text-align: center;
+        }
+
+        .btn-police {
+            background: linear-gradient(135deg, var(--police-blue), #0052cc);
+            color: white;
+            border: 2px solid var(--siren-blue);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+
+        .btn-police:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            border-color: #555;
+        }
+
+        .btn-police:not(:disabled):hover {
+            box-shadow: 0 0 20px var(--police-accent);
+            transform: translateY(-2px);
+        }
+
+        /* MOBIELE KNOPPEN / SMARTBOARD PIJLEN */
+        .mobile-dpad {
+            display: none;
+            grid-template-columns: repeat(3, 50px);
+            grid-template-rows: repeat(3, 50px);
+            gap: 6px;
+            margin: 10px auto;
+            justify-content: center;
+        }
+
+        .dpad-btn {
+            background: #1b2845;
+            border: 2px solid #324b7a;
+            color: white;
+            font-size: 1.2em;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .dpad-btn:active { background: var(--police-accent); }
+
+        @media (max-width: 900px) {
+            .main-stage { flex-direction: column; align-items: center; }
+            .sidebar { width: 100%; max-width: 550px; }
+            .mobile-dpad { display: grid; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BOVENBALK MET STATUS -->
+    <header>
+        <div class="title-block">
+            <div class="siren-badge"><i class="fa-solid fa-car-side"></i></div>
+            <div class="title-text">
+                <h1>Politie Pacman</h1>
+                <span>25x30 Woordenschat Patrouille</span>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item"><i class="fa-solid fa-trophy" style="color:var(--gold)"></i> Score: <span id="scoreDisplay">0</span></div>
+            <div class="stat-item"><i class="fa-solid fa-layer-group" style="color:var(--siren-blue)"></i> Level: <span id="levelDisplay">1</span></div>
+            <div class="stat-item"><i class="fa-solid fa-shield-heart" style="color:var(--siren-red)"></i> Levens: <span id="livesDisplay">3</span></div>
+        </div>
+    </header>
+
+    <!-- SPEELVELD EN ZIJPANEEL -->
+    <div class="main-stage">
+        
+        <!-- HET 25 bij 30 DOOLHOF -->
+        <div class="game-wrapper">
+            <canvas id="gameCanvas" width="550" height="660"></canvas>
+        </div>
+
+        <!-- RECHTERKANT: KLASSEN LEADERBOARD -->
+        <div class="sidebar">
+            <h2><i class="fa-solid fa-ranking-star"></i> Korps Leaderboard</h2>
+            
+            <div class="class-selector">
+                <label for="classSelect"><strong>Klas:</strong></label>
+                <select id="classSelect" onchange="switchClass()">
+                    <option value="Alpha">Alpha</option>
+                    <option value="Bravo">Bravo</option>
+                    <option value="Charlie">Charlie</option>
+                    <option value="Delta">Delta</option>
+                    <option value="Echo">Echo</option>
+                    <option value="Foxtrot">Foxtrot</option>
+                    <option value="Golf">Golf</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="Juliet">Juliet</option>
+                    <option value="Kilo">Kilo</option>
+                    <option value="Lima">Lima</option>
+                    <option value="Mike">Mike</option>
+                </select>
+            </div>
+
+            <div style="font-size: 0.8em; color: #90caf9; margin-top: -4px;">
+                Speler: <strong id="currentPlayerLabel" style="color: #fff;">Agent</strong>
+            </div>
+
+            <ul class="leaderboard-list" id="leaderboardList">
+                <!-- Dynamisch gevuld -->
+            </ul>
+
+            <div class="controls-hint">
+                <strong><i class="fa-solid fa-gamepad"></i> Besturing:</strong><br>
+                • Pijltjestoetsen of <strong>W-A-S-D</strong>.<br>
+                • Grote knipperende bollen zijn <strong>Sirene-Turbo's</strong>: rijd over een diefje heen om hem te arresteren!
+            </div>
+        </div>
+    </div>
+
+    <!-- TOUCH KNOPPEN VOOR TABLETS / SMARTBOARDS -->
+    <div class="mobile-dpad">
+        <div></div>
+        <button class="dpad-btn" onclick="sendInput('up')"><i class="fa-solid fa-arrow-up"></i></button>
+        <div></div>
+        <button class="dpad-btn" onclick="sendInput('left')"><i class="fa-solid fa-arrow-left"></i></button>
+        <button class="dpad-btn" onclick="sendInput('down')"><i class="fa-solid fa-arrow-down"></i></button>
+        <button class="dpad-btn" onclick="sendInput('right')"><i class="fa-solid fa-arrow-right"></i></button>
+    </div>
+
+    <!-- MODAL POPUP: WOORDENSCHATTETOETS (5 WOORDEN) -->
+    <div class="modal-overlay" id="vocabModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"><i class="fa-solid fa-key"></i> Politie Kennisverificatie</h2>
+                <p id="modalSubtitle">Los de 5 woordenschatopgaven op om de patrouillewagen te starten!</p>
+            </div>
+
+            <div id="questionsContainer">
+                <!-- 5 invuloefeningen worden hier geladen -->
+            </div>
+
+            <button class="btn-police" id="btnContinue" disabled onclick="finishVocabChallenge()">
+                <i class="fa-solid fa-lock"></i> Beantwoord alle 5 vragen correct
+            </button>
+        </div>
+    </div>
+
+    <script>
+        /* ================= 1. DE 48 WOORDENSCHAT WOORDEN ================= */
+        const VOCABULARY = [
+            { word: "determineren", def: "bepalen, vaststellen op grond van bepaalde kenmerken" },
+            { word: "souterrain", def: "ruimte van een woning die gedeeltelijk beneden straatniveau ligt" },
+            { word: "consistentie", def: "samenhang; duurzaamheid" },
+            { word: "gallicisme", def: "een (te) letterlijke vertaling uit het Frans" },
+            { word: "absolverend", def: "vrijstelling gevend voor een deel van een examen" },
+            { word: "mom", def: "dekmantel, façade" },
+            { word: "olijk", def: "leuk; guitig" },
+            { word: "hardvochtig", def: "wreed en zonder medelijden" },
+            { word: "eega", def: "echtgenote" },
+            { word: "conventie", def: "internationale overeenkomst" },
+            { word: "restrictie", def: "beperking; voorwaarde" },
+            { word: "kim", def: "rand van de horizon" },
+            { word: "partizaan", def: "guerrillastrijder" },
+            { word: "liberaal", def: "ruimdenkend; onbekrompen" },
+            { word: "diversificatie", def: "risico door voor verscheidenheid te kiezen" },
+            { word: "fecaliën", def: "uitwerpselen" },
+            { word: "contingent", def: "bepaalde hoeveelheid, verplicht aandeel van de markt" },
+            { word: "summier", def: "kort en bondig" },
+            { word: "ethiek", def: "de leer van goed en kwaad" },
+            { word: "respijt", def: "uitstel" },
+            { word: "usance", def: "gewoonte; gebruik" },
+            { word: "torso", def: "beeld dat bestaat uit een romp zonder hoofd, benen en armen" },
+            { word: "initiëren", def: "opzetten, opstarten" },
+            { word: "intrigeren", def: "de nieuwsgierigheid stimuleren" },
+            { word: "sage", def: "overgeleverd (volks-)verhaal gebaseerd op een historische gebeurtenis" },
+            { word: "loeven", def: "dichter bij de wind komen (van zeilen)" },
+            { word: "prolongeren", def: "de duur verlengen" },
+            { word: "paria", def: "verschoppeling; uitgestotene" },
+            { word: "prominent", def: "vooraanstaand; belangrijk" },
+            { word: "collaborateur", def: "iemand die in een door de vijand bezet land met de bezetters samenwerkt" },
+            { word: "delinquent", def: "misdadiger, crimineel" },
+            { word: "ampel", def: "uitvoering, omstandigheid" },
+            { word: "paradigma", def: "voorbeeld; rij van mogelijkheden" },
+            { word: "stabiliteit", def: "duurzaamheid; bestendigheid" },
+            { word: "fresco", def: "muurschildering met waterverf op een verse laag kalk" },
+            { word: "pedagogische", def: "opvoedkundige" },
+            { word: "filantroop", def: "weldoener, mensenvriend" },
+            { word: "extravert", def: "naar buiten gekeerd" },
+            { word: "viool", def: "muziekinstrument met snaren waarover je strijkt met een stok waarop haren gespannen zijn" },
+            { word: "respectabel", def: "achtenswaardig, eerbiedwaardig" },
+            { word: "antithese", def: "tegenstelling" },
+            { word: "no-nonsense", def: "hard en zakelijk" },
+            { word: "entourage", def: "omgeving" },
+            { word: "sarcasme", def: "bittere bijtende spot" },
+            { word: "decadentie", def: "geleidelijk verval, overdreven zucht naar genot" },
+            { word: "dependances", def: "bij een hoofdgebouw behorende bijgebouwen" },
+            { word: "banaal", def: "ordinair; grof" },
+            { word: "satirische", def: "op geestige wijze kritiek leverend" }
+        ];
+
+        let wordPool = [...VOCABULARY];
+        let currentQuestions = [];
+        let completedQuestions = new Set();
+        let wordsAnsweredTotal = 0;
+
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function getNextFiveWords() {
+            if (wordPool.length < 5) {
+                wordPool = [...VOCABULARY];
+            }
+            shuffle(wordPool);
+            return wordPool.splice(0, 5);
+        }
+
+        /* ================= 2. AUDIO SYNTHESIZER ================= */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, duration) {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function sndDot() { playTone(600, 'sine', 0.05); }
+        function sndSiren() { playTone(950, 'sawtooth', 0.15); }
+        function sndCatch() { playTone(300, 'square', 0.3); }
+        function sndLevelUp() {
+            [400, 550, 700, 900].forEach((f, i) => {
+                setTimeout(() => playTone(f, 'triangle', 0.2), i * 120);
+            });
+        }
+
+        /* ================= 3. HET 25 x 30 GRID ================= */
+        const COLS = 25;
+        const ROWS = 30;
+        const TILE = 22; // 25 * 22 = 550px breed, 30 * 22 = 660px hoog
+
+        // 1 = Muur, 2 = Stip, 3 = Turbo-Sirene, 0 = Leeg, 4 = Spookhuis-deur/gevangenis
+        const MAP_TEMPLATE = [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,3,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,3,1],
+            [1,2,1,1,1,2,1,1,1,1,1,2,1,2,1,1,1,1,1,2,1,1,1,2,1],
+            [1,2,1,1,1,2,1,1,1,1,1,2,1,2,1,1,1,1,1,2,1,1,1,2,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,2,1,1,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1,2,1,1,1,2,1],
+            [1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1],
+            [1,1,1,1,1,2,1,1,1,1,0,2,1,2,0,1,1,1,1,2,1,1,1,1,1],
+            [0,0,0,0,1,2,1,0,0,0,0,2,0,2,0,0,0,0,1,2,1,0,0,0,0],
+            [1,1,1,1,1,2,1,0,1,1,1,4,4,4,1,1,1,0,1,2,1,1,1,1,1],
+            [0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,1,0,0,2,0,0,0,0,0],
+            [1,1,1,1,1,2,1,0,1,0,0,0,0,0,0,0,1,0,1,2,1,1,1,1,1],
+            [0,0,0,0,1,2,1,0,1,1,1,1,1,1,1,1,1,0,1,2,1,0,0,0,0],
+            [1,1,1,1,1,2,1,0,0,0,0,0,0,0,0,0,0,0,1,2,1,1,1,1,1],
+            [0,2,2,2,2,2,2,2,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,0], // Wrap-around tunnel rij
+            [1,1,1,1,1,2,1,0,1,1,1,1,1,1,1,1,1,0,1,2,1,1,1,1,1],
+            [0,0,0,0,1,2,1,0,0,0,0,0,1,0,0,0,0,0,1,2,1,0,0,0,0],
+            [1,1,1,1,1,2,1,2,1,1,1,2,1,2,1,1,1,2,1,2,1,1,1,1,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,2,1,1,1,2,1,1,1,1,1,2,1,2,1,1,1,1,1,2,1,1,1,2,1],
+            [1,3,2,2,1,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,1,2,2,3,1],
+            [1,1,1,2,1,2,1,2,1,1,1,1,1,1,1,1,1,2,1,2,1,2,1,1,1],
+            [1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1,2,2,2,2,2,1],
+            [1,2,1,1,1,1,1,1,1,1,0,2,1,2,0,1,1,1,1,1,1,1,1,2,1],
+            [1,2,1,1,1,1,1,1,1,1,0,2,1,2,0,1,1,1,1,1,1,1,1,2,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,2,1,1,1,2,1,1,1,1,1,2,1,2,1,1,1,1,1,2,1,1,1,2,1],
+            [1,2,1,1,1,2,1,1,1,1,1,2,1,2,1,1,1,1,1,2,1,1,1,2,1],
+            [1,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ];
+
+        let map = [];
+        let totalDots = 0;
+        let score = 0;
+        let level = 1;
+        let lives = 3;
+        let gameRunning = false;
+        let turboTimer = 0;
+        let sirenFlashState = false;
+
+        /* ================= 4. SPELER & DIEFJES OBJECTEN ================= */
+        const policeCar = {
+            x: 12, y: 18,
+            pixelX: 12 * TILE, pixelY: 18 * TILE,
+            dirX: 0, dirY: 0,
+            nextDirX: 0, nextDirY: 0,
+            speed: 2.2,
+            angle: 0
+        };
+
+        const thieves = [
+            { id: 1, name: "Boris", color: "#e53935", x: 11, y: 11, pixelX: 11*TILE, pixelY: 11*TILE, dirX: 0, dirY: -1, speed: 1.8, inJail: false, scared: false },
+            { id: 2, name: "Igor", color: "#ff9800", x: 12, y: 11, pixelX: 12*TILE, pixelY: 11*TILE, dirX: 1, dirY: 0, speed: 1.7, inJail: false, scared: false },
+            { id: 3, name: "Zeno", color: "#00e5ff", x: 13, y: 11, pixelX: 13*TILE, pixelY: 11*TILE, dirX: -1, dirY: 0, speed: 1.6, inJail: false, scared: false },
+            { id: 4, name: "Klaas", color: "#e91e63", x: 12, y: 12, pixelX: 12*TILE, pixelY: 12*TILE, dirX: 0, dirY: 1, speed: 1.5, inJail: false, scared: false }
+        ];
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        /* ================= 5. RESET EN LEVEL INITIALISATIE ================= */
+        function initMap() {
+            map = [];
+            totalDots = 0;
+            for (let r = 0; r < ROWS; r++) {
+                map[r] = [];
+                for (let c = 0; c < COLS; c++) {
+                    const tile = MAP_TEMPLATE[r][c];
+                    map[r][c] = tile;
+                    if (tile === 2 || tile === 3) totalDots++;
+                }
+            }
+        }
+
+        function resetPositions() {
+            policeCar.x = 12;
+            policeCar.y = 18;
+            policeCar.pixelX = 12 * TILE;
+            policeCar.pixelY = 18 * TILE;
+            policeCar.dirX = 0;
+            policeCar.dirY = 0;
+            policeCar.nextDirX = 0;
+            policeCar.nextDirY = 0;
+            policeCar.angle = 0;
+
+            const baseSpeed = 1.6 + (level * 0.2);
+            thieves.forEach((t, i) => {
+                t.x = 11 + (i % 3);
+                t.y = 11 + Math.floor(i / 3);
+                t.pixelX = t.x * TILE;
+                t.pixelY = t.y * TILE;
+                t.dirX = (i % 2 === 0) ? 1 : -1;
+                t.dirY = 0;
+                t.speed = baseSpeed + (i * 0.08);
+                t.scared = false;
+            });
+        }
+
+        /* ================= 6. BESTURING ================= */
+        window.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowUp': case 'w': case 'W': sendInput('up'); break;
+                case 'ArrowDown': case 's': case 'S': sendInput('down'); break;
+                case 'ArrowLeft': case 'a': case 'A': sendInput('left'); break;
+                case 'ArrowRight': case 'd': case 'D': sendInput('right'); break;
+            }
+        });
+
+        function sendInput(dir) {
+            if (!gameRunning) return;
+            if (dir === 'up') { policeCar.nextDirX = 0; policeCar.nextDirY = -1; }
+            if (dir === 'down') { policeCar.nextDirX = 0; policeCar.nextDirY = 1; }
+            if (dir === 'left') { policeCar.nextDirX = -1; policeCar.nextDirY = 0; }
+            if (dir === 'right') { policeCar.nextDirX = 1; policeCar.nextDirY = 0; }
+        }
+
+        function canMove(c, r, isGhost = false) {
+            // Tunnel wrap around
+            if ((c < 0 || c >= COLS) && r === 14) return true;
+            if (c < 0 || c >= COLS || r < 0 || r >= ROWS) return false;
+            const tile = map[r][c];
+            if (tile === 1) return false;
+            if (tile === 4 && !isGhost) return false; // Alleen diefjes mogen door tralies
+            return true;
+        }
+
+        /* ================= 7. RENDER FUNCTIES ================= */
+        // Knipper-interval voor sirene
+        setInterval(() => { sirenFlashState = !sirenFlashState; }, 140);
+
+        function drawMap() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const tile = map[r][c];
+                    const x = c * TILE;
+                    const y = r * TILE;
+
+                    if (tile === 1) {
+                        // Strakke blauwe neon politiemuren
+                        ctx.fillStyle = '#0f2042';
+                        ctx.fillRect(x, y, TILE, TILE);
+                        ctx.strokeStyle = '#1e88e5';
+                        ctx.lineWidth = 1.5;
+                        ctx.strokeRect(x + 1, y + 1, TILE - 2, TILE - 2);
+                    } else if (tile === 4) {
+                        // Tralies van gevangenis
+                        ctx.fillStyle = '#212121';
+                        ctx.fillRect(x, y, TILE, TILE);
+                        ctx.strokeStyle = '#bdbdbd';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.moveTo(x + 4, y); ctx.lineTo(x + 4, y + TILE);
+                        ctx.moveTo(x + 11, y); ctx.lineTo(x + 11, y + TILE);
+                        ctx.moveTo(x + 18, y); ctx.lineTo(x + 18, y + TILE);
+                        ctx.stroke();
+                    } else if (tile === 2) {
+                        // Gewone stip
+                        ctx.fillStyle = '#ffecb3';
+                        ctx.beginPath();
+                        ctx.arc(x + TILE/2, y + TILE/2, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    } else if (tile === 3) {
+                        // Turbo Sirene Bol
+                        ctx.fillStyle = sirenFlashState ? '#00e5ff' : '#ff1744';
+                        ctx.beginPath();
+                        ctx.arc(x + TILE/2, y + TILE/2, 6.5, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.strokeStyle = '#ffffff';
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function drawPoliceCar() {
+            ctx.save();
+            ctx.translate(policeCar.pixelX + TILE/2, policeCar.pixelY + TILE/2);
+            ctx.rotate(policeCar.angle);
+
+            // Koplampen lichtbundel
+            ctx.fillStyle = 'rgba(255, 238, 88, 0.22)';
+            ctx.beginPath();
+            ctx.moveTo(8, -6);
+            ctx.lineTo(24, -14);
+            ctx.lineTo(24, 14);
+            ctx.lineTo(8, 6);
+            ctx.closePath();
+            ctx.fill();
+
+            // Auto basis
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(-10, -7, 18, 14);
+
+            // Blauwe politiestriping aan zijkant
+            ctx.fillStyle = '#003082';
+            ctx.fillRect(-6, -7, 10, 3);
+            ctx.fillRect(-6, 4, 10, 3);
+
+            // Voorruit & achterruit
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(1, -5, 4, 10);
+            ctx.fillRect(-8, -5, 3, 10);
+
+            // Knipperende zwaailichten op dak
+            ctx.fillStyle = sirenFlashState ? '#ff1744' : '#00e5ff';
+            ctx.beginPath();
+            ctx.arc(-2, -3, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = sirenFlashState ? '#00e5ff' : '#ff1744';
+            ctx.beginPath();
+            ctx.arc(-2, 3, 2.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawThief(t) {
+            ctx.save();
+            ctx.translate(t.pixelX + TILE/2, t.pixelY + TILE/2);
+
+            const bodyColor = t.scared ? (turboTimer < 90 && sirenFlashState ? '#ffffff' : '#1e88e5') : t.color;
+
+            // Spookjes / Diefjes lijfje
+            ctx.fillStyle = bodyColor;
+            ctx.beginPath();
+            ctx.arc(0, -2, 8, Math.PI, 0, false);
+            ctx.lineTo(8, 7);
+            // Gekartelde onderkant
+            ctx.lineTo(4, 5);
+            ctx.lineTo(0, 7);
+            ctx.lineTo(-4, 5);
+            ctx.lineTo(-8, 7);
+            ctx.closePath();
+            ctx.fill();
+
+            if (!t.scared) {
+                // Zwart boevenmasker
+                ctx.fillStyle = '#111111';
+                ctx.fillRect(-7, -4, 14, 4.5);
+
+                // Ogen van de boef
+                ctx.fillStyle = '#ffffff';
+                ctx.beginPath();
+                ctx.arc(-3.5 + t.dirX, -2, 2, 0, Math.PI * 2);
+                ctx.arc(3.5 + t.dirX, -2, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Gestreepte gevangenisboord
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(-5, 2, 10, 1.5);
+            } else {
+                // Bange oogjes & boeien
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(-4, -3, 2, 2);
+                ctx.fillRect(2, -3, 2, 2);
+                // Handboeien icoon
+                ctx.strokeStyle = '#cfd8dc';
+                ctx.lineWidth = 1.2;
+                ctx.strokeRect(-4, 2, 8, 3);
+            }
+
+            ctx.restore();
+        }
+
+        /* ================= 8. GAME ENGINE & UPDATE LOOP ================= */
+        function update() {
+            if (!gameRunning) return;
+
+            // --- 1. POLITIECAR BEWEGING ---
+            const gridX = Math.round(policeCar.pixelX / TILE);
+            const gridY = Math.round(policeCar.pixelY / TILE);
+            const atCenter = (Math.abs(policeCar.pixelX - gridX * TILE) < 2) && (Math.abs(policeCar.pixelY - gridY * TILE) < 2);
+
+            if (atCenter) {
+                policeCar.pixelX = gridX * TILE;
+                policeCar.pixelY = gridY * TILE;
+                policeCar.x = gridX;
+                policeCar.y = gridY;
+
+                // Wrap-around tunnel
+                if (policeCar.x <= 0 && policeCar.dirX === -1) {
+                    policeCar.x = COLS - 1;
+                    policeCar.pixelX = (COLS - 1) * TILE;
+                } else if (policeCar.x >= COLS - 1 && policeCar.dirX === 1) {
+                    policeCar.x = 0;
+                    policeCar.pixelX = 0;
+                }
+
+                // Eet stippen
+                if (map[policeCar.y] && map[policeCar.y][policeCar.x] === 2) {
+                    map[policeCar.y][policeCar.x] = 0;
+                    score += 10;
+                    totalDots--;
+                    sndDot();
+                    document.getElementById('scoreDisplay').innerText = score;
+                } else if (map[policeCar.y] && map[policeCar.y][policeCar.x] === 3) {
+                    map[policeCar.y][policeCar.x] = 0;
+                    score += 50;
+                    totalDots--;
+                    turboTimer = 280; // Sirene turbo tijd
+                    thieves.forEach(t => t.scared = true);
+                    sndSiren();
+                    document.getElementById('scoreDisplay').innerText = score;
+                }
+
+                // Check of level leeg is
+                if (totalDots <= 0) {
+                    levelUp();
+                    return;
+                }
+
+                // Richting veranderen indien mogelijk
+                if (policeCar.nextDirX !== 0 || policeCar.nextDirY !== 0) {
+                    if (canMove(policeCar.x + policeCar.nextDirX, policeCar.y + policeCar.nextDirY)) {
+                        policeCar.dirX = policeCar.nextDirX;
+                        policeCar.dirY = policeCar.nextDirY;
+                    }
+                }
+
+                // Stop voor muur
+                if (!canMove(policeCar.x + policeCar.dirX, policeCar.y + policeCar.dirY)) {
+                    policeCar.dirX = 0;
+                    policeCar.dirY = 0;
+                }
+
+                // Bereken draaihoek
+                if (policeCar.dirX === 1) policeCar.angle = 0;
+                if (policeCar.dirX === -1) policeCar.angle = Math.PI;
+                if (policeCar.dirY === 1) policeCar.angle = Math.PI / 2;
+                if (policeCar.dirY === -1) policeCar.angle = -Math.PI / 2;
+            }
+
+            policeCar.pixelX += policeCar.dirX * policeCar.speed;
+            policeCar.pixelY += policeCar.dirY * policeCar.speed;
+
+            // --- 2. DIEFJES AI BEWEGING ---
+            if (turboTimer > 0) {
+                turboTimer--;
+                if (turboTimer === 0) {
+                    thieves.forEach(t => t.scared = false);
+                }
+            }
+
+            thieves.forEach(t => {
+                const tgX = Math.round(t.pixelX / TILE);
+                const tgY = Math.round(t.pixelY / TILE);
+                const tAtCenter = (Math.abs(t.pixelX - tgX * TILE) < 2) && (Math.abs(t.pixelY - tgY * TILE) < 2);
+
+                if (tAtCenter) {
+                    t.pixelX = tgX * TILE;
+                    t.pixelY = tgY * TILE;
+                    t.x = tgX;
+                    t.y = tgY;
+
+                    // Mogelijke richtingen evalueren
+                    const dirs = [
+                        { x: 1, y: 0 }, { x: -1, y: 0 },
+                        { x: 0, y: 1 }, { x: 0, y: -1 }
+                    ];
+
+                    // Niet direct omkeren tenzij doodlopend
+                    const validDirs = dirs.filter(d => {
+                        if (d.x === -t.dirX && d.y === -t.dirY) return false;
+                        return canMove(t.x + d.x, t.y + d.y, true);
+                    });
+
+                    if (validDirs.length > 0) {
+                        // Eenvoudige achtervolging of willekeurige patrouille
+                        if (!t.scared && Math.random() < 0.6) {
+                            validDirs.sort((a,b) => {
+                                const distA = Math.hypot((t.x + a.x) - policeCar.x, (t.y + a.y) - policeCar.y);
+                                const distB = Math.hypot((t.x + b.x) - policeCar.x, (t.y + b.y) - policeCar.y);
+                                return distA - distB;
+                            });
+                            t.dirX = validDirs[0].x;
+                            t.dirY = validDirs[0].y;
+                        } else {
+                            const chosen = validDirs[Math.floor(Math.random() * validDirs.length)];
+                            t.dirX = chosen.x;
+                            t.dirY = chosen.y;
+                        }
+                    } else if (canMove(t.x - t.dirX, t.y - t.dirY, true)) {
+                        t.dirX = -t.dirX;
+                        t.dirY = -t.dirY;
+                    }
+                }
+
+                const currentSpeed = t.scared ? t.speed * 0.6 : t.speed;
+                t.pixelX += t.dirX * currentSpeed;
+                t.pixelY += t.dirY * currentSpeed;
+
+                // --- 3. BOTSING CHECK ---
+                const dist = Math.hypot(policeCar.pixelX - t.pixelX, policeCar.pixelY - t.pixelY);
+                if (dist < 14) {
+                    if (t.scared) {
+                        // Dief gearresteerd!
+                        sndCatch();
+                        score += 200;
+                        document.getElementById('scoreDisplay').innerText = score;
+                        t.pixelX = 12 * TILE;
+                        t.pixelY = 11 * TILE;
+                        t.x = 12; t.y = 11;
+                        t.scared = false;
+                    } else {
+                        // Politieauto gecrasht / gepakt!
+                        handleCaught();
+                    }
+                }
+            });
+
+            // RENDEREN
+            drawMap();
+            drawPoliceCar();
+            thieves.forEach(drawThief);
+
+            requestAnimationFrame(update);
+        }
+
+        /* ================= 9. CRASH & LEVEL OVERGANG ================= */
+        function handleCaught() {
+            gameRunning = false;
+            lives--;
+            document.getElementById('livesDisplay').innerText = lives;
+
+            if (lives <= 0) {
+                // Game Over
+                saveToLeaderboard();
+                alert(`Geen patrouillewagens meer over! Einde spel.\nJe behaalde een score van ${score} punten in Level ${level}.`);
+                lives = 3;
+                score = 0;
+                level = 1;
+                document.getElementById('livesDisplay').innerText = lives;
+                document.getElementById('scoreDisplay').innerText = score;
+                document.getElementById('levelDisplay').innerText = level;
+                initMap();
+                resetPositions();
+            }
+
+            // Toon woordenschattoets met 5 NIEUWE woorden!
+            document.getElementById('modalTitle').innerHTML = `<i class="fa-solid fa-triangle-exclamation" style="color:var(--siren-red)"></i> Aanhouding Mislukt!`;
+            document.getElementById('modalSubtitle').innerText = "Beantwoord 5 nieuwe woordenschatopgaven om je wagen te repareren en door te rijden:";
+            openVocabChallenge();
+        }
+
+        function levelUp() {
+            gameRunning = false;
+            sndLevelUp();
+            level++;
+            document.getElementById('levelDisplay').innerText = level;
+            alert(`Fantastisch werk, agent! Alle stippen zijn veiliggesteld.\nLevel ${level} start nu: de diefjes worden sneller!`);
+            initMap();
+            resetPositions();
+            gameRunning = true;
+            requestAnimationFrame(update);
+        }
+
+        /* ================= 10. DE WOORDENSCHAT INVULOEFENING ================= */
+        function openVocabChallenge() {
+            currentQuestions = getNextFiveWords();
+            completedQuestions.clear();
+
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = "";
+
+            currentQuestions.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = "question-card";
+                card.id = `qCard_${idx}`;
+
+                card.innerHTML = `
+                    <div class="question-def"><strong>${idx + 1}.</strong> ${q.def}</div>
+                    <div class="input-row">
+                        <input type="text" class="word-input" id="input_${idx}" 
+                            placeholder="Typ het woord (${q.word.length} letters)..." 
+                            autocomplete="off" 
+                            oninput="checkAnswer(${idx}, '${q.word}')">
+                        <div class="status-icon" id="status_${idx}"><i class="fa-solid fa-clock" style="color:#78909c"></i></div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            const btn = document.getElementById('btnContinue');
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-lock"></i> Beantwoord alle 5 vragen correct (0/5)`;
+
+            document.getElementById('vocabModal').style.display = 'flex';
+        }
+
+        window.checkAnswer = function(idx, expectedWord) {
+            const val = document.getElementById(`input_${idx}`).value.trim().toLowerCase();
+            const card = document.getElementById(`qCard_${idx}`);
+            const status = document.getElementById(`status_${idx}`);
+
+            // Normaliseer speciale tekens (bijv. ë -> e) voor soepele verificatie
+            const cleanVal = val.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            const cleanExp = expectedWord.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+            if (cleanVal === cleanExp || val === expectedWord) {
+                card.classList.add('correct');
+                status.innerHTML = `<i class="fa-solid fa-circle-check" style="color:#00e676"></i>`;
+                completedQuestions.add(idx);
+            } else {
+                card.classList.remove('correct');
+                status.innerHTML = `<i class="fa-solid fa-circle-xmark" style="color:#ff5252"></i>`;
+                completedQuestions.delete(idx);
+            }
+
+            const btn = document.getElementById('btnContinue');
+            btn.innerHTML = `<i class="fa-solid fa-lock"></i> Beantwoord alle 5 vragen correct (${completedQuestions.size}/5)`;
+            
+            if (completedQuestions.size === 5) {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-siren-on"></i> Sirene Aan: Start Patrouille!`;
+            } else {
+                btn.disabled = true;
+            }
+        };
+
+        window.finishVocabChallenge = function() {
+            wordsAnsweredTotal += 5;
+            document.getElementById('vocabModal').style.display = 'none';
+            resetPositions();
+            gameRunning = true;
+            requestAnimationFrame(update);
+        };
+
+        /* ================= 11. KLASSEN LEADERBOARD ================= */
+        let currentClass = "Alpha";
+        let playerName = "";
+
+        function askPlayerInfo() {
+            playerName = prompt("Welkom bij de Politieacademie Pacman.\nWat is je naam?", "Agent") || "Anonieme Agent";
+            document.getElementById('currentPlayerLabel').innerText = playerName;
+            updateLeaderboardView();
+        }
+
+        window.switchClass = function() {
+            currentClass = document.getElementById('classSelect').value;
+            updateLeaderboardView();
+        };
+
+        function getLeaderboardKey() {
+            return `police_pacman_scores_${currentClass}`;
+        }
+
+        function saveToLeaderboard() {
+            if (score <= 0) return;
+            const key = getLeaderboardKey();
+            const entries = JSON.parse(localStorage.getItem(key) || "[]");
+            entries.push({
+                name: playerName,
+                score: score,
+                level: level,
+                words: wordsAnsweredTotal,
+                date: new Date().toLocaleDateString('nl-NL')
+            });
+            entries.sort((a,b) => b.score - a.score);
+            localStorage.setItem(key, JSON.stringify(entries.slice(0, 10)));
+            updateLeaderboardView();
+        }
+
+        function updateLeaderboardView() {
+            const key = getLeaderboardKey();
+            const entries = JSON.parse(localStorage.getItem(key) || "[]");
+            const list = document.getElementById('leaderboardList');
+            list.innerHTML = "";
+
+            if (entries.length === 0) {
+                list.innerHTML = `<li style="padding:10px; font-size:0.8em; color:#90caf9; text-align:center;">Nog geen scores voor klas ${currentClass}. Wees de eerste!</li>`;
+                return;
+            }
+
+            entries.forEach((e, idx) => {
+                const li = document.createElement('li');
+                li.className = `leaderboard-item top-${idx + 1}`;
+                li.innerHTML = `
+                    <span><strong>#${idx + 1} ${e.name}</strong> (Lvl ${e.level})</span>
+                    <span style="color:var(--gold); font-weight:bold;">${e.score} pt</span>
+                `;
+                list.appendChild(li);
+            });
+        }
+
+        /* ================= 12. STARTUP SEQUENCE ================= */
+        window.onload = () => {
+            initMap();
+            drawMap();
+            askPlayerInfo();
+            // Start de eerste woordenschatcyclus van 5 vragen
+            openVocabChallenge();
+        };
+    </script>
+</body>
+</html>
